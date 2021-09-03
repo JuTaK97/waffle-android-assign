@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Assignment0</string>
-    <string name="string_introduce">Introduce</string>
-    <string name="string_practice"> practice </string>
+    <string name="string_introduce">introduce</string>
+    <string name="string_practice">Practice</string>
 </resources>
