@@ -2,4 +2,14 @@
     <string name="app_name">Assignment0</string>
     <string name="string_introduce">introduce</string>
     <string name="string_practice">Practice</string>
+    <string name="introduce_message">
+        \n
+        제 이름은 양주현입니다.\n
+        학과는 지구환경과학부이고, 현재 컴퓨터공학부 부전공입니다.\n
+        사진: 도림천에서 자전거 타기 좋아합니다.\n
+        안드로이드 태어나서 처음 해봅니다. 열심히 하겠습니다.
+    </string>
+    <string name="string_emptyInput">숫자를 입력해주세요.</string>
+    <string name="string_errorInput">유효한 입력이 아닙니다.</string>
+    <string name="string_default">정수들을 한 칸씩 띄워서 입력해주세요.</string>
 </resources>
