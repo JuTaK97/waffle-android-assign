@@ -31,7 +31,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun check() {
+    private fun check() {
         if(gameover) return
 
         val num_rep = IntArray(9)
@@ -69,8 +69,6 @@ class MainViewModel : ViewModel() {
             gameover = true
         }
     }
-
-
     fun restart() {
         gameover = false
         ox = true

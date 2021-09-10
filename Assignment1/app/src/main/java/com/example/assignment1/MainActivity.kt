@@ -19,20 +19,16 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.button1.setOnClickListener {viewModel.click(0)}
-        binding.button2.setOnClickListener {viewModel.click(1)}
-        binding.button3.setOnClickListener {viewModel.click(2)}
-        binding.button4.setOnClickListener {viewModel.click(3)}
-        binding.button5.setOnClickListener {viewModel.click(4)}
-        binding.button6.setOnClickListener {viewModel.click(5)}
-        binding.button7.setOnClickListener {viewModel.click(6)}
-        binding.button8.setOnClickListener {viewModel.click(7)}
-        binding.button9.setOnClickListener {viewModel.click(8)}
-        binding.buttonRestart.setOnClickListener{viewModel.restart()}
 
         val buttonList = listOf(binding.button1,binding.button2,binding.button3,
                                 binding.button4,binding.button5,binding.button6,
                                 binding.button7,binding.button8,binding.button9)
+
+        for(i in 0 until 9) {
+            buttonList[i].setOnClickListener{viewModel.click(i)}
+        }
+
+        binding.buttonRestart.setOnClickListener{viewModel.restart()}
 
         viewModel.data.observe(this, {
             for(i in 0 until 9) buttonList[i].text = it[i].toString()
