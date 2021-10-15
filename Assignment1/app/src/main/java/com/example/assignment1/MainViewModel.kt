@@ -3,7 +3,6 @@ package com.example.assignment1
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import timber.log.Timber
 import java.lang.Math.abs
 
 
