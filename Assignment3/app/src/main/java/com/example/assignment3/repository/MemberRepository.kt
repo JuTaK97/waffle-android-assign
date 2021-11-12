@@ -1,16 +1,16 @@
 package com.wafflestudio.assignment3.repository
 
+import androidx.lifecycle.LiveData
 import com.wafflestudio.assignment3.db.MemberDao
 import com.wafflestudio.assignment3.model.Member
 import com.wafflestudio.assignment3.network.MemberService
 
-// TODO
 class MemberRepository constructor(
     private val memberDao: MemberDao,
     private val memberService: MemberService
 ) {
 
-    suspend fun getAllMember() : List<Member> = memberDao.getAllMember()
+    fun getAllMember() = memberDao.getAllMember()
     suspend fun fetchAllMember() {
         memberDao.saveMembers(memberService.fetchAllMember().body)
     }

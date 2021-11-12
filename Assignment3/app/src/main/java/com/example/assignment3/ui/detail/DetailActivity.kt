@@ -7,8 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.wafflestudio.assignment3.databinding.ActivityDetailBinding
 
-
-
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
