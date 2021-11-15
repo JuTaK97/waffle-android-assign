@@ -38,26 +38,24 @@ class SignUpActivity : AppCompatActivity() {
                 binding.signupPassword.text.toString(),
                 binding.signupRole.text.toString()
             )
-            val response = viewModel.signUp(param)
-            response.enqueue(object: Callback<FetchSignup> {
-                override fun onFailure(call: Call<FetchSignup>, t: Throwable) {
-                    Timber.d("signup fail")
-                    Toast.makeText(this@SignUpActivity, "Signup failed!!",Toast.LENGTH_LONG).show()
+            viewModel.signUp(param)
+            viewModel.result.observe(this, {
+                if(it == "fail") {
+                    Toast.makeText(this, viewModel.errorMessage, Toast.LENGTH_LONG).show()
                 }
-                override fun onResponse(call: Call<FetchSignup>, response: Response<FetchSignup>) {
-                    if(response.body()?.token != null) {
-                        Timber.d("signup success")
-                        sharedPreferences.edit {
-                            putString("token", response.body()!!.token)
-                        }
-                        val intent = Intent(this@SignUpActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        val returnIntent = Intent()
-                        setResult(RESULT_OK, returnIntent)
-                        finish()
-                    }
+                else {
+                    viewModel.getRole()
                 }
             })
+            viewModel.role.observe(this, {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("role", it)
+                startActivity(intent)
+
+                setResult(RESULT_OK, Intent())
+                finish()
+            })
+
 
         }
     }

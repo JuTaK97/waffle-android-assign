@@ -11,8 +11,8 @@ import com.example.assignment4.ui.seminar.detail.DetailSeminarActivity
 import timber.log.Timber
 import java.lang.IllegalStateException
 
-class SeminarAdapter (
-    private val myRole:String): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SeminarAdapter (private val myRole:String):
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class ParticipantSeminarHolder(var binding1 : SeminarInfoParticipantBinding) :RecyclerView.ViewHolder(binding1.root)
     inner class InstructorSeminarHolder(var binding2 : SeminarInfoInstructorBinding) :RecyclerView.ViewHolder(binding2.root)
@@ -29,19 +29,22 @@ class SeminarAdapter (
                 val binding = SeminarInfoInstructorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 InstructorSeminarHolder(binding)
             }
-            else -> {
+            OTHER -> {
                 val binding = SeminarInfoOtherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 OtherSeminarHolder(binding)
             }
-            //else -> throw IllegalStateException("Illegal viewType")
+            else -> throw IllegalStateException("Illegal viewType")
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val seminar = seminars[position]
         val nameBuilder = StringBuilder()
+        var i = 0
         for(instructor in seminar.instructors) {
+            i += 1
             nameBuilder.append(instructor.username)
+            if(i<seminar.instructors.size) nameBuilder.append(", ")
         }
         when(holder) {
             is ParticipantSeminarHolder -> {
@@ -71,9 +74,7 @@ class SeminarAdapter (
     }
 
     override fun getItemViewType(position: Int): Int {
-        val role = myRole
-        Timber.d("Callback: my role is $role")
-        return when(role){
+        return when(myRole){
             "participant"-> PARTICIPANT
             "instructor" -> INSTRUCTOR
             "other" -> OTHER

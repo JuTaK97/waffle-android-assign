@@ -1,4 +1,4 @@
-package com.example.assignment4.ui.seminar.create.dto
+package com.example.assignment4.dto
 
 
 // POST "api/v1/seminar/" 할 때 보내야 하는 dto

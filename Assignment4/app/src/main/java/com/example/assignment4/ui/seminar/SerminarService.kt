@@ -1,10 +1,9 @@
 package com.example.assignment4.ui.seminar
 
-import com.example.assignment4.ui.seminar.create.dto.CreateSeminarFetch
-import com.example.assignment4.ui.seminar.create.dto.CreateSeminarRequest
-import com.example.assignment4.ui.seminar.detail.DetailSeminarFetch
+import com.example.assignment4.dto.CreateSeminarFetch
+import com.example.assignment4.dto.CreateSeminarRequest
+import com.example.assignment4.dto.DetailSeminarFetch
 import com.example.assignment4.ui.seminar.detail.Role
-import com.example.assignment4.ui.user.User
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET

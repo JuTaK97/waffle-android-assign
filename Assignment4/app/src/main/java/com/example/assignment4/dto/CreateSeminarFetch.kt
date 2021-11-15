@@ -1,4 +1,4 @@
-package com.example.assignment4.ui.seminar.create.dto
+package com.example.assignment4.dto
 
 import com.example.assignment4.ui.seminar.SeminarInstructor
 

@@ -1,5 +1,7 @@
 package com.example.assignment4.ui.seminar
 
+
+// GET 세미나 했을 때 응답으로 받아오는 정보
 data class Seminar (
     val id : Int,
     val name : String,

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment4.databinding.InstructorDetailBinding
-import com.example.assignment4.databinding.ParticipantDetailBinding
+import com.example.assignment4.dto.DetailInstructor
 import timber.log.Timber
 
 class InstructorListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

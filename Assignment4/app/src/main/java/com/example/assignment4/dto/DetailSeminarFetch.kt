@@ -1,4 +1,4 @@
-package com.example.assignment4.ui.seminar.detail
+package com.example.assignment4.dto
 
 
 // GET "api/v1/seminar/1/" 했을 때의 response

@@ -1,8 +1,6 @@
 package com.example.assignment4.dto
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-
+// 회원가입 POST 할 때 보내는 정보
 data class RequestSignup(
 
     val email: String,

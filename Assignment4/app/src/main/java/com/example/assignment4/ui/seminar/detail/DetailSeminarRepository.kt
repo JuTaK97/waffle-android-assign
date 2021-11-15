@@ -1,10 +1,10 @@
 package com.example.assignment4.ui.seminar.detail
 
+import com.example.assignment4.dto.DetailSeminarFetch
 import com.example.assignment4.ui.seminar.SeminarService
 import retrofit2.Call
 import javax.inject.Inject
 import javax.inject.Singleton
-
 
 @Singleton
 class DetailSeminarRepository @Inject constructor(

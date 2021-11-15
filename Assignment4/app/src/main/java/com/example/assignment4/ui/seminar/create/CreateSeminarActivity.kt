@@ -7,8 +7,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.assignment4.databinding.ActivityCreateSeminarBinding
 import com.example.assignment4.ui.seminar.detail.DetailSeminarActivity
-import com.example.assignment4.ui.seminar.create.dto.CreateSeminarFetch
-import com.example.assignment4.ui.seminar.create.dto.CreateSeminarRequest
+import com.example.assignment4.dto.CreateSeminarFetch
+import com.example.assignment4.dto.CreateSeminarRequest
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback

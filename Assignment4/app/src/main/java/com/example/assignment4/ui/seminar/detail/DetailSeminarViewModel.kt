@@ -4,6 +4,9 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.assignment4.dto.DetailInstructor
+import com.example.assignment4.dto.DetailParticipant
+import com.example.assignment4.dto.DetailSeminarFetch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -39,8 +42,6 @@ class DetailSeminarViewModel @Inject constructor(
         return  response
     }
     fun joinSeminar(id : Int, role: String) :Call<DetailSeminarFetch> {
-        Timber.d("aaaaaaaaaaaaaaaaaa")
-        Timber.d(role)
         val response = detailSeminarRepository.joinSeminar(id, role)
         response.clone().enqueue(object : Callback<DetailSeminarFetch> {
             override fun onFailure(call: Call<DetailSeminarFetch>, t: Throwable) {

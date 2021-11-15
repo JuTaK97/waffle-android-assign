@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assignment4.databinding.ActivityDetailSeminarBinding
+import com.example.assignment4.dto.DetailSeminarFetch
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 import retrofit2.Call
@@ -55,8 +56,6 @@ class DetailSeminarActivity : AppCompatActivity() {
         response.clone().enqueue(object : Callback<DetailSeminarFetch> {
             override fun onFailure(call: Call<DetailSeminarFetch>, t: Throwable) {
                 Timber.d("GET seminar detail failed")
-                Toast.makeText(this@DetailSeminarActivity, "GET seminar Detail failed",
-                Toast.LENGTH_LONG).show()
             }
             override fun onResponse(
                 call: Call<DetailSeminarFetch>,
