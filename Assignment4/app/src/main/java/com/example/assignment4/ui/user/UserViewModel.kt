@@ -21,12 +21,37 @@ class UserViewModel @Inject constructor(
 
     fun getUserInfo() {
         val response = userService.getUserInfo()
-        response.enqueue(object : Callback<User> {
+        response.clone().enqueue(object : Callback<User> {
             override fun onFailure(call: Call<User>, t: Throwable) {
                 Timber.d("Failed to get user info")
             }
             override fun onResponse(call: Call<User>, response: Response<User>) {
-                _userInfo.value = response.body()
+                if(response.body()!=null) {
+                    Timber.d("GET user info success")
+                    _userInfo.value = response.body()
+                }
+                else {
+                    Timber.d("GET user info unsuccessful")
+                }
+
+            }
+        })
+    }
+    fun editUserInfo(param : UserInfoEditRequest) {
+        val response = userService.editUserInfo(param)
+        response.clone().enqueue(object : Callback<User> {
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Timber.d("Failed to edit user info")
+            }
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if(response.body()!=null) {
+                    Timber.d("Edit user info success")
+                    _userInfo.value = response.body()
+                }
+                else {
+                    Timber.d("Edit user info unsuccessful")
+                }
+
             }
         })
     }

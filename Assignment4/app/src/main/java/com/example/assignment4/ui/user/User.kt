@@ -1,7 +1,7 @@
 package com.example.assignment4.ui.user
 
-import com.example.assignment4.ui.seminar.Seminar
-
+// GET "api/v1/user/me/"의 응답으로 사용됨
+// PUT "api/v1/user/me/" 의 응답으로 사용됨
 data class User (
     val id : Int,
     val username : String,
@@ -18,10 +18,10 @@ data class Participant (
     val id : Int,
     val university : String,
     val accepted : Boolean,
-    val seminars : List<mySeminar>
+    val seminars : List<MySeminar>
 )
 
-data class mySeminar (
+data class MySeminar (
     val id : Int,
     val name : String,
     val joined_at: String,

@@ -1,13 +1,28 @@
 package com.example.assignment4.ui.seminar
 
+import com.example.assignment4.ui.seminar.create.dto.CreateSeminarFetch
+import com.example.assignment4.ui.seminar.create.dto.CreateSeminarRequest
+import com.example.assignment4.ui.seminar.detail.DetailSeminarFetch
+import com.example.assignment4.ui.seminar.detail.Role
 import com.example.assignment4.ui.user.User
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface SeminarService {
     @GET("api/v1/seminar/")
     fun getSeminarList() : Call<List<Seminar>>
 
-    @GET("api/v1/user/me/")
-    fun getRole() : Call<User>
+    @POST("api/v1/seminar/")
+    fun createSeminar(@Body param: CreateSeminarRequest) : Call<CreateSeminarFetch>
+
+    @GET("api/v1/seminar/{seminar_id}/")
+    fun getSeminarDetail(@Path(value="seminar_id") seminar_id:Int) : Call<DetailSeminarFetch>
+
+
+    @POST("api/v1/seminar/{seminar_id}/user/")
+    fun joinSeminar(@Path(value="seminar_id") seminar_id: Int, @Body role:Role)
+    : Call<DetailSeminarFetch>
 }

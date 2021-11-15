@@ -57,6 +57,13 @@
             android:text="회원 정보 수정하기" />
 
         <TextView
+            android:id="@+id/text_charge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp"
+            android:textSize="20sp" />
+
+        <TextView
             android:id="@+id/text_recyclerViewTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -66,6 +73,7 @@
             android:textSize="20sp" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_user"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center">

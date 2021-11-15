@@ -6,7 +6,6 @@ import android.util.Log
 import com.example.assignment4.BuildConfig
 import com.example.assignment4.login.LoginService
 import com.example.assignment4.signup.SignUpService
-import com.example.assignment4.ui.MainService
 import com.example.assignment4.ui.seminar.SeminarService
 import com.example.assignment4.ui.user.UserService
 import com.squareup.moshi.Moshi
@@ -18,13 +17,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
 import javax.inject.Singleton
-
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -41,34 +40,23 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideHttpClient(sharedPreferences: SharedPreferences): OkHttpClient {
-        if (sharedPreferences.getString("token","")=="") {
-            return OkHttpClient.Builder()
-                .addInterceptor(
-                    HttpLoggingInterceptor().apply {
-                        level =
-                            if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
-                            else HttpLoggingInterceptor.Level.NONE
-                    }
-                ).build()
-        }
-        else {
-            return OkHttpClient.Builder()
-                .addInterceptor { chain: Interceptor.Chain ->
-                    val newRequest = chain.request().newBuilder().addHeader(
-                        "Authorization", "JWT ${sharedPreferences.getString("token", "")}"
-                    ).build()
-                    chain.proceed(newRequest)
+        return OkHttpClient.Builder()
+            .addInterceptor{chain : Interceptor.Chain ->
+                val newRequest = chain.request().newBuilder()
+                val token = sharedPreferences.getString("token","nothing")
+                if(token!="nothing") {
+                    newRequest.addHeader("Authorization", "JWT $token")
                 }
-                .addInterceptor(
-                    HttpLoggingInterceptor().apply {
-                        level =
-                            if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
-                            else HttpLoggingInterceptor.Level.NONE
-                    }
-                )
-                .build()
-        }
+                chain.proceed(newRequest.build())}
+            .addInterceptor(
+                HttpLoggingInterceptor().apply {
+                level =
+                    if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+                    else HttpLoggingInterceptor.Level.NONE
+            })
+            .build()
     }
+
 
     @InstallIn(SingletonComponent::class)
     @Module
@@ -114,9 +102,4 @@ object NetworkModule {
         return retrofit.create(UserService::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun provideMainService(retrofit: Retrofit) : MainService {
-        return retrofit.create(MainService::class.java)
-    }
 }

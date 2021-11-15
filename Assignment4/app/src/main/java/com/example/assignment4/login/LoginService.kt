@@ -1,6 +1,7 @@
 package com.example.assignment4.login
 
 import com.example.assignment4.dto.*
+import com.example.assignment4.ui.user.User
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -11,5 +12,5 @@ interface LoginService {
 
     //임시
     @GET("api/v1/user/me/")
-    fun get() : Call<FetchUserInfo>
+    fun get() :  Call<User>
 }

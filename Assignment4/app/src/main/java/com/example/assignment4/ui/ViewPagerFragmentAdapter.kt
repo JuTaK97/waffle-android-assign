@@ -6,9 +6,10 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.assignment4.ui.seminar.SeminarFragment
 import com.example.assignment4.ui.user.UserFragment
 
-class ViewPagerFragmentAdapter(fragmentActivity: FragmentActivity):FragmentStateAdapter(fragmentActivity) {
+class ViewPagerFragmentAdapter(fragmentActivity: FragmentActivity, role : String)
+    :FragmentStateAdapter(fragmentActivity) {
 
-    val fragmentList = listOf(SeminarFragment(),UserFragment())
+    val fragmentList = listOf(SeminarFragment(role),UserFragment(role))
     override fun createFragment(position: Int): Fragment {
         return fragmentList[position]
     }

@@ -1,5 +1,6 @@
 package com.example.assignment4.ui
 
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,17 +22,17 @@ import javax.inject.Inject
 class MainActivity: AppCompatActivity() {
 
     private lateinit var binding:ActivityMainBinding
-    private val viewModel : MainViewModel by viewModels()
-
+    // private val viewModel : MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val role = intent.getStringExtra("role").toString()
+
         val viewPager :ViewPager2 = binding.mainView
-        val viewPagerFragmentAdapter = ViewPagerFragmentAdapter(this)
+        val viewPagerFragmentAdapter = ViewPagerFragmentAdapter(this, role)
         viewPager.adapter = viewPagerFragmentAdapter
     }
 

@@ -1,16 +1,18 @@
 package com.example.assignment4.ui.seminar
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment4.databinding.SeminarInfoInstructorBinding
 import com.example.assignment4.databinding.SeminarInfoOtherBinding
 import com.example.assignment4.databinding.SeminarInfoParticipantBinding
+import com.example.assignment4.ui.seminar.detail.DetailSeminarActivity
 import timber.log.Timber
 import java.lang.IllegalStateException
 
 class SeminarAdapter (
-    private val callbackInterface: CallbackInterface): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val myRole:String): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class ParticipantSeminarHolder(var binding1 : SeminarInfoParticipantBinding) :RecyclerView.ViewHolder(binding1.root)
     inner class InstructorSeminarHolder(var binding2 : SeminarInfoInstructorBinding) :RecyclerView.ViewHolder(binding2.root)
@@ -27,11 +29,11 @@ class SeminarAdapter (
                 val binding = SeminarInfoInstructorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 InstructorSeminarHolder(binding)
             }
-            OTHER -> {
+            else -> {
                 val binding = SeminarInfoOtherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 OtherSeminarHolder(binding)
             }
-            else -> throw IllegalStateException("Illegal viewType")
+            //else -> throw IllegalStateException("Illegal viewType")
         }
     }
 
@@ -55,6 +57,13 @@ class SeminarAdapter (
                 holder.binding3.textName.text = seminar.name
             }
         }
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, DetailSeminarActivity::class.java)
+            intent.putExtra("id", seminar.id)
+            intent.putExtra("role", myRole)
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -62,7 +71,7 @@ class SeminarAdapter (
     }
 
     override fun getItemViewType(position: Int): Int {
-        val role = callbackInterface.callBack()
+        val role = myRole
         Timber.d("Callback: my role is $role")
         return when(role){
             "participant"-> PARTICIPANT
