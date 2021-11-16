@@ -6,6 +6,6 @@ data class CreateSeminarRequest (
     val online : Boolean?,
     val time : String,
     val name : String,
-    val capacity : Int,
-    val count : Int
+    val capacity : Int?,
+    val count : Int?
 )

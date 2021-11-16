@@ -33,7 +33,7 @@ data class Instructor (
     val id : Int,
     val company : String,
     val year : Int?,
-    val charge : Charge
+    val charge : Charge?
 )
 
 data class Charge (

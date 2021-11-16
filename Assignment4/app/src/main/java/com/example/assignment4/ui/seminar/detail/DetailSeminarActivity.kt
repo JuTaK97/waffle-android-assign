@@ -1,5 +1,6 @@
 package com.example.assignment4.ui.seminar.detail
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -20,7 +21,9 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class DetailSeminarActivity : AppCompatActivity() {
+class DetailSeminarActivity : AppCompatActivity(){
+
+
     private lateinit var binding : ActivityDetailSeminarBinding
     private val viewModel : DetailSeminarViewModel by viewModels()
 
@@ -31,6 +34,8 @@ class DetailSeminarActivity : AppCompatActivity() {
     private lateinit var instructorLayoutManager: LinearLayoutManager
 
 
+
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailSeminarBinding.inflate(layoutInflater)
@@ -51,64 +56,30 @@ class DetailSeminarActivity : AppCompatActivity() {
             layoutManager = instructorLayoutManager
         }
 
+        val myRole = intent.getStringExtra("role").toString()
         val id = intent.getIntExtra("id",0)
-        val response = viewModel.getDetailSeminar(id)
-        response.clone().enqueue(object : Callback<DetailSeminarFetch> {
-            override fun onFailure(call: Call<DetailSeminarFetch>, t: Throwable) {
-                Timber.d("GET seminar detail failed")
+        viewModel.getDetailSeminar(id)
+
+        viewModel.seminarInfo.observe(this, {
+            binding.seminarCapacity.text = "Capacity: "+it.capacity.toString()
+            binding.seminarCount.text = "Count: "+it.count.toString()
+            binding.seminarName.text = it.name
+            if(it.online) {
+                binding.seminarOnline.text = "Online"
             }
-            override fun onResponse(
-                call: Call<DetailSeminarFetch>,
-                response: Response<DetailSeminarFetch>
-            ) {
-                if(response.isSuccessful && response.body()!=null) {
-                    Timber.d("GET seminar detail success")
-                    binding.seminarCapacity.text = response.body()!!.capacity.toString()
-                    binding.seminarCount.text = response.body()!!.count.toString()
-                    binding.seminarName.text = response.body()!!.name
-                    binding.seminarOnline.text = response.body()!!.online.toString()
-                    binding.seminarTime.text = response.body()!!.time
-                }
-                else {
-                    // TODO: error message
-                }
+            else {
+                binding.seminarOnline.text = "Offline"
             }
-        })
-        viewModel.instructorList.observe(this, {
-            instructorAdapter.setDetailInstructorList(it)
-        })
-        viewModel.participantList.observe(this, {
-            participantAdapter.setDetailParticipantList(it)
+            binding.seminarTime.text = it.time
+            participantAdapter.setDetailParticipantList(it.participants)
+            instructorAdapter.setDetailInstructorList(it.instructors)
         })
         binding.buttonJoin.setOnClickListener {
-            val responseJoin = viewModel.joinSeminar(id, intent.getStringExtra("role").toString())
-            responseJoin.clone().enqueue(object : Callback<DetailSeminarFetch> {
-                override fun onFailure(call: Call<DetailSeminarFetch>, t: Throwable) {
-                    Timber.d("Join seminar failed")
-                    Toast.makeText(this@DetailSeminarActivity, "Join seminar failed",
-                        Toast.LENGTH_LONG).show()
-                }
-
-                override fun onResponse(
-                    call: Call<DetailSeminarFetch>,
-                    response: Response<DetailSeminarFetch>
-                ) {
-                    if(response.isSuccessful) {
-                        Timber.d("Join seminar success")
-                        binding.seminarCount.text = response.body()!!.count.toString()
-                    }
-                    else {
-                        Timber.d("Join seminar unsuccessful")
-                        Toast.makeText(this@DetailSeminarActivity, response.errorBody().toString()
-                            ,Toast.LENGTH_LONG).show()
-                        Toast.makeText(this@DetailSeminarActivity, response.body().toString()
-                            ,Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-
-            )
+            viewModel.joinSeminar(id, myRole)
         }
+        viewModel.joinResult.observe(this, {
+            Toast.makeText(this, viewModel.errorMessage, Toast.LENGTH_SHORT).show()
+        })
     }
     
 }

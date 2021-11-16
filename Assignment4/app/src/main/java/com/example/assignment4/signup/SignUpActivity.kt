@@ -39,24 +39,22 @@ class SignUpActivity : AppCompatActivity() {
                 binding.signupRole.text.toString()
             )
             viewModel.signUp(param)
-            viewModel.result.observe(this, {
-                if(it == "fail") {
-                    Toast.makeText(this, viewModel.errorMessage, Toast.LENGTH_LONG).show()
+        }
+        viewModel.result.observe(this, {
+            if(it == "fail") {
+                Toast.makeText(this, viewModel.errorMessage, Toast.LENGTH_SHORT).show()
+            }
+            else {
+                sharedPreferences.edit{
+                    putString("role", binding.signupRole.text.toString())
                 }
-                else {
-                    viewModel.getRole()
-                }
-            })
-            viewModel.role.observe(this, {
+                Toast.makeText(this,"회원가입에 성공하였습니다", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("role", it)
+                intent.putExtra("role", binding.signupRole.text.toString() )
                 startActivity(intent)
-
                 setResult(RESULT_OK, Intent())
                 finish()
-            })
-
-
-        }
+            }
+        })
     }
 }

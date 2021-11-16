@@ -10,4 +10,5 @@
     <color name="color_participant">#b3e5fc</color>
     <color name="color_instructor">#dcedc8</color>
     <color name="color_other">#ffffff</color>
+    <color name="skyBlue">#4BBEFC</color>
 </resources>

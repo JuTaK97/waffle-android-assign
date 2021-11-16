@@ -4,11 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assignment4.databinding.FragmentUserBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -48,6 +52,9 @@ class UserFragment(role : String) : Fragment() {
             )
             viewModel.editUserInfo(param)
         }
+        viewModel.errorMessage.observe(viewLifecycleOwner, {
+            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+        })
 
         viewModel.userInfo.observe(viewLifecycleOwner, {
             binding.textUsername.setText(it.username)
@@ -57,10 +64,11 @@ class UserFragment(role : String) : Fragment() {
                 userAdapter.setMySeminars(it.participant!!.seminars)
             }
             else if(myRole=="instructor") {
-                Timber.d(it.instructor!!.charge.name)
                 val builder = StringBuilder()
                 builder.append("내가 진행중인 세미나: ")
-                builder.append(it.instructor.charge.name)
+                if(it.instructor?.charge!=null) {
+                    builder.append(it.instructor.charge.name)
+                }
                 binding.textCharge.text = builder.toString()
                 binding.textRecyclerViewTitle.text = ""
             }

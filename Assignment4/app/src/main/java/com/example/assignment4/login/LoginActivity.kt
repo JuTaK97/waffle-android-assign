@@ -42,10 +42,23 @@ class LoginActivity : AppCompatActivity() {
             Timber.d("token exists")
             viewModel.getRole()
             viewModel.role.observe(this, {
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("role", it)
-                startActivity(intent)
-                finish()
+                if(it=="error") { // token is expired
+                    sharedPreferences.edit {
+                        remove("token")
+                        remove("roll")
+                        commit()
+                    }
+                    Toast.makeText(this, viewModel.errorMessage, Toast.LENGTH_LONG).show()
+                    val myIntent  =Intent(this, LoginActivity::class.java)
+                    finish()
+                    startActivity(myIntent)
+                }
+                else {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("role", viewModel.role.value.toString())
+                    startActivity(intent)
+                    finish()
+                }
             })
         }
         else {
@@ -67,21 +80,23 @@ class LoginActivity : AppCompatActivity() {
                     binding.loginPassword.text.toString()
                 )
                 viewModel.login(param)
+                viewModel.result.observe(this, {
+                    if(it == "fail") {
+                        Toast.makeText(this, viewModel.errorMessage, Toast.LENGTH_LONG).show()
+                    }
+                    else {
+                        Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_LONG).show()
+                        viewModel.getRole()
+                    }
+                })
+                viewModel.role.observe(this, {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("role", it)
+                    startActivity(intent)
+                    finish()
+                })
             }
-            viewModel.result.observe(this, {
-                if(it == "fail") {
-                    Toast.makeText(this, viewModel.errorMessage, Toast.LENGTH_LONG).show()
-                }
-                else {
-                    viewModel.getRole()
-                }
-            })
-            viewModel.role.observe(this, {
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("role", it)
-                startActivity(intent)
-                finish()
-            })
+
         }
     }
 

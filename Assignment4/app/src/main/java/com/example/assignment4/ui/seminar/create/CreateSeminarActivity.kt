@@ -27,44 +27,29 @@ class CreateSeminarActivity: AppCompatActivity() {
         binding = ActivityCreateSeminarBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val myRole = getIntent().getStringExtra("role").toString()
+
         binding.buttonCreate.setOnClickListener {
-            try {
-                val param = CreateSeminarRequest(
-                    binding.buttonOnline.isChecked,
-                    binding.textTime.text.toString(),
-                    binding.textSeminarName.text.toString(),
-                    binding.textCapacity.text.toString().toInt(),
-                    binding.textCount.text.toString().toInt())
-
-                val response =  viewModel.createSeminar(param)
-                response.enqueue(object : Callback<CreateSeminarFetch> {
-                    override fun onFailure(call: Call<CreateSeminarFetch>, t: Throwable) {
-                        Toast.makeText(this@CreateSeminarActivity, "Failed to create", Toast.LENGTH_LONG).show()
-                    }
-                    override fun onResponse(
-                        call: Call<CreateSeminarFetch>,
-                        response: Response<CreateSeminarFetch>
-                    ) {
-                        if(response.isSuccessful) {
-                            Timber.d("DetailActivity start")
-                            val intent = Intent(this@CreateSeminarActivity, DetailSeminarActivity::class.java)
-                            intent.putExtra("id", response.body()!!.id)
-                            intent.putExtra("role", getIntent().getStringExtra("role").toString())
-                            startActivity(intent)
-                            finish()
-                        }
-                        else {
-                            Toast.makeText(this@CreateSeminarActivity,
-                                response.errorBody().toString(), Toast.LENGTH_LONG).show()
-                        }
-                    }
-                })
-
-            } catch (e:Exception) {
-                Toast.makeText(this, e.toString(),Toast.LENGTH_LONG).show()
-            }
-
+            val param = CreateSeminarRequest(
+                binding.buttonOnline.isChecked,
+                binding.textTime.text.toString(),
+                binding.textSeminarName.text.toString(),
+                binding.textCapacity.text.toString().toIntOrNull(),
+                binding.textCount.text.toString().toIntOrNull())
+            viewModel.createSeminar(param)
         }
+        viewModel.result.observe(this, {
+            if(it=="success") {
+                val intent = Intent(this@CreateSeminarActivity, DetailSeminarActivity::class.java)
+                intent.putExtra("id", viewModel.id.value!!.toInt())
+                intent.putExtra("role", myRole)
+                startActivity(intent)
+                finish()
+            }
+            else {
+                Toast.makeText(this, viewModel.errorMessage, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
 

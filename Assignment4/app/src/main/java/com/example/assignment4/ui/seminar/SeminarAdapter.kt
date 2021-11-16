@@ -65,6 +65,7 @@ class SeminarAdapter (private val myRole:String):
             val intent = Intent(context, DetailSeminarActivity::class.java)
             intent.putExtra("id", seminar.id)
             intent.putExtra("role", myRole)
+
             context.startActivity(intent)
         }
     }

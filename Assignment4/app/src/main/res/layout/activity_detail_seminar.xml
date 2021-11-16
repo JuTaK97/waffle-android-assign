@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="409dp"
         android:layout_height="729dp"
+        android:background="@color/white"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
+            android:background="@color/white"
             android:padding="10dp"
             android:text="Seminar name"
             android:textAlignment="center"
@@ -75,6 +77,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@color/white"
                 android:text="Instructor List"
                 android:textAlignment="center"
                 android:textSize="20sp" />
@@ -84,6 +87,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@color/white"
                 android:text="Participant List"
                 android:textAlignment="center"
                 android:textSize="20sp" />
@@ -91,7 +95,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="282dp"
+            android:layout_height="376dp"
             android:orientation="horizontal">
 
             <androidx.recyclerview.widget.RecyclerView

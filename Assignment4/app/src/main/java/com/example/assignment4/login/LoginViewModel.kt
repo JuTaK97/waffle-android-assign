@@ -20,17 +20,21 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
 import timber.log.Timber
 import java.io.IOException
+import java.lang.Exception
 import javax.inject.Inject
 
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginRepository: LoginRepository
+    private val loginRepository: LoginRepository,
+    private val retrofit: Retrofit
 ) : ViewModel() {
     @Inject
     lateinit var sharedPreferences: SharedPreferences
+
 
     private val _role  = MutableLiveData<String>()
     val role : LiveData<String> = _role
@@ -49,7 +53,20 @@ class LoginViewModel @Inject constructor(
             }
             override fun onResponse(call: Call<FetchLogin>, response: Response<FetchLogin>) {
                 if(!response.isSuccessful) {
-                    errorMessage = response.errorBody().toString()
+                    if(response.errorBody()!=null) {
+                        try {
+                            val error = retrofit.responseBodyConverter<ErrorMessage>(
+                                ErrorMessage::class.java,
+                                ErrorMessage::class.java.annotations
+                            ).convert(response.errorBody())
+                            errorMessage = parsing(error)
+                        } catch (e: Exception) {
+                            errorMessage = response.errorBody()?.string()!!
+                        }
+                    }
+                    else {
+                        errorMessage = "Login failed"
+                    }
                     _result.value = "fail"
                 }
                 else {
@@ -68,13 +85,33 @@ class LoginViewModel @Inject constructor(
                 Timber.d("user role GET failed")
             }
             override fun onResponse(call: Call<User>, response: Response<User>) {
-                if (response.body()?.instructor != null) {
-                    _role.value = "instructor"
-                } else if (response.body()?.participant != null) {
-                    _role.value = "participant"
-                } else {
-                    _role.value = "other"
+                if(response.isSuccessful) {
+                    if (response.body()?.instructor != null) {
+                        _role.value = "instructor"
+                    } else if (response.body()?.participant != null) {
+                        _role.value = "participant"
+                    } else {
+                        _role.value = "other"
+                    }
                 }
+                else {
+                    if(response.errorBody()!=null) {
+                        try {
+                            val error = retrofit.responseBodyConverter<ErrorMessage>(
+                                ErrorMessage::class.java,
+                                ErrorMessage::class.java.annotations
+                            ).convert(response.errorBody())
+                            errorMessage = parsing(error)
+                        } catch (e:Exception) {
+                            errorMessage = response.errorBody()?.string()!!
+                        }
+                    }
+                    else {
+                        errorMessage = "Login failed"
+                    }
+                    _role.value = "error"
+                }
+
             }
         })
     }

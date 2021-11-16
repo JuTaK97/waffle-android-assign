@@ -8,22 +8,22 @@ import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.assignment4.dto.FetchLogin
-import com.example.assignment4.dto.FetchSignup
-import com.example.assignment4.dto.RequestLogin
-import com.example.assignment4.dto.RequestSignup
+import com.example.assignment4.dto.*
 import com.example.assignment4.ui.MainActivity
 import com.example.assignment4.ui.user.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
 import timber.log.Timber
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val signUpRepository: SignUpRepository
+    private val signUpRepository: SignUpRepository,
+    private val retrofit: Retrofit
 ) :ViewModel(){
     @Inject
     lateinit var sharedPreferences: SharedPreferences
@@ -43,7 +43,20 @@ class SignUpViewModel @Inject constructor(
             }
             override fun onResponse(call: Call<FetchSignup>, response: Response<FetchSignup>) {
                 if(!response.isSuccessful) {
-                    errorMessage = response.errorBody().toString()
+                    if(response.errorBody()!=null) {
+                        try {
+                            val error = retrofit.responseBodyConverter<ErrorMessage>(
+                                ErrorMessage::class.java,
+                                ErrorMessage::class.java.annotations
+                            ).convert(response.errorBody())
+                            errorMessage = parsing(error)
+                        } catch (e:Exception) {
+                            errorMessage = response.errorBody()?.string()!!
+                        }
+                    }
+                    else {
+                        errorMessage = "Login failed"
+                    }
                     _result.value = "fail"
                 }
                 else {
@@ -51,24 +64,6 @@ class SignUpViewModel @Inject constructor(
                         putString("token", response.body()!!.token)
                     }
                     _result.value = "success"
-                }
-            }
-        })
-
-    }
-    fun getRole() {
-        val roleResponse = signUpRepository.getRole()
-        roleResponse.clone().enqueue(object : Callback<User> {
-            override fun onFailure(call: Call<User>, t: Throwable) {
-                Timber.d("user role GET failed")
-            }
-            override fun onResponse(call: Call<User>, response: Response<User>) {
-                if (response.body()?.instructor != null) {
-                    _role.value = "instructor"
-                } else if (response.body()?.participant != null) {
-                    _role.value = "participant"
-                } else {
-                    _role.value = "other"
                 }
             }
         })
